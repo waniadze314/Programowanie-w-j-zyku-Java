@@ -44,12 +44,14 @@ class AdjFrame extends JFrame implements ActionListener{
      btn.setPreferredSize(new Dimension(btn_x, btn_y));
      setSize(width,height);
      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-     setTitle("Running Button");    
+     setTitle("Running Button");   
+     panel.setBackground(new Color(0,0,0,0));
+     btn.setBackground(new Color(255,0,0));   
      getContentPane().add(panel);
      setUndecorated(true);
+     setBackground(new Color(0,0,0,0));
      setVisible(true);
-     panel.setBackground(new Color(0,0,0,0));
-     btn.setBackground(new Color(255,0,0));
+        
      
     }
 }
