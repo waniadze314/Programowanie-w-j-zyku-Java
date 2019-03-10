@@ -19,9 +19,6 @@ class AdjFrame extends JFrame implements ActionListener{
     private JPanel panel;
     private Random pos_generator;
 
-
-
-    @Override 
     public void actionPerformed(ActionEvent e) {
         int x_temp = pos_generator.nextInt();
         int y_temp = pos_generator.nextInt();
