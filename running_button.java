@@ -1,61 +1,131 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import java.awt.Dimension;
-import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Event;
 import java.awt.Color;
+import java.awt.Point;
 import java.util.Random;
 import java.lang.Math;
+import java.util.TimerTask;
+import java.util.Timer;
 
-
-class AdjFrame extends JFrame implements ActionListener{
-
-    private int width, height, btn_x=80, btn_y=50;
-    private JButton btn;
-    private JPanel panel;
+class RunningButton extends JButton {
+    private final int default_step=120;
     private Random pos_generator;
+    private Point next_location, current_location;
+    private JLabel text;
+    private int x_limit=640, y_limit=480;
+    private final int x_dim=100, y_dim=100;
+    private int step;
 
-    public void actionPerformed(ActionEvent e) {
-        int x_temp = pos_generator.nextInt();
-        int y_temp = pos_generator.nextInt();
-        int x = Math.abs(x_temp%(width-btn_x));
-        int y = Math.abs(y_temp%(height-btn_y));
-        System.out.println(x+" "+y);
-        btn.setLocation(x,y);  
-        repaint();     
+
+    RunningButton(int frame_x, int frame_y){ 
+        x_limit = frame_x;
+        y_limit = frame_y;
+        pos_generator = new Random();   
+        setPreferredSize(new Dimension(x_dim, y_dim));   
+        current_location = next_location = new Point(getLocation());
+        text = new JLabel("Exit");
+        add(text);
+        step=default_step;        
+        }
+
+  
+    public Point getNextLocation(){
+        return next_location;
     }
 
+    public Point getCurrentLocation(){
+        return current_location;
+    }
+    
+    public Point getNewLocation(){
+        int x_temp = pos_generator.nextInt();
+        int y_temp = pos_generator.nextInt();
+        next_location = new Point( Math.abs(x_temp%(x_limit-x_dim)), Math.abs(y_temp%(y_limit-y_dim)) );
+        return next_location;
+    }
+
+    public void move(){ 
+        double temp_x_distance = next_location.getX()-current_location.getX();
+        double temp_y_distance = next_location.getY()-current_location.getY();
+        Point temp_location = new Point((int)temp_x_distance/step, (int)temp_y_distance/step);
+        current_location.x += temp_location.x;
+        current_location.y += temp_location.y;
+        setLocation(current_location);
+        step--;
+          if(step==0){
+              current_location = next_location;
+              step=120;
+     }
+    }
+
+
+}
+
+class AdjFrame extends JFrame {
+    private int width, height;
+    private RunningButton button;
+    private JPanel panel;
+    private Timer tim1;
+
     AdjFrame(){
-     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-     width = (int)dim.getWidth();
-     height = (int) dim.getHeight();
-     pos_generator = new Random();
+        width = 640;
+        height = 480;
+        makeContent();
+        repaint();
+    }
+
+    AdjFrame(Dimension dim){
+        width = (int)dim.getWidth();
+        height = (int)dim.getHeight();
+        makeContent();
+        repaint();
+    }
+
+     private void makeContent(){
      panel = new JPanel();
-     btn = new JButton("Exit");
-     btn.addActionListener(this);
-     panel.add(btn);
-     btn.setPreferredSize(new Dimension(btn_x, btn_y));
+     tim1 = new Timer();
+     button = new RunningButton(width, height);
+     button.addActionListener(new ActionListener(){
+     
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            button.getNewLocation();
+         }
+     } );
+     panel.add(button);
+     panel.setBackground(new Color(0,0,0,0));
      setSize(width,height);
      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-     setTitle("Running Button");   
-     panel.setBackground(new Color(0,0,0,0));
-     btn.setBackground(new Color(255,0,0));   
+     setTitle("Running Button");  
      getContentPane().add(panel);
      setUndecorated(true);
      setBackground(new Color(0,0,0,0));
      setVisible(true);
+     tim1.scheduleAtFixedRate(new TimerTask(){
         
-     
+        @Override
+        public void run() {   
+            if(button.getCurrentLocation() != button.getNextLocation()){
+                try{                      
+                repaint();      
+                button.move();
+                }catch (NullPointerException e){
+                    System.out.println("Null ptr exception");
+                }
+            }                       
+        }
+    }, 33, 33);   
     }
 }
-
-
 class running_button{
-    public static void main(String args[]){
-        AdjFrame window = new AdjFrame();
+    public static void main(String args[]){        
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        AdjFrame window = new AdjFrame(dim);
     }
 }
