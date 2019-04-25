@@ -26,10 +26,10 @@ class RunningButton extends JButton {
     RunningButton(int frame_x, int frame_y){ 
         x_limit = frame_x;
         y_limit = frame_y;
-        pos_generator = new Random();   
-        setPreferredSize(new Dimension(x_dim, y_dim));   
+        pos_generator = new Random(); 
         current_location = next_location = new Point(x_limit/2, y_limit/2);        
-        setLocation(current_location);
+        setLocation(current_location);  
+        setPreferredSize(new Dimension(x_dim, y_dim));         
         setBackground(new Color(255,0,0));
         text = new JLabel("Exit");
         add(text);
@@ -114,8 +114,8 @@ class AdjFrame extends JFrame {
         public void run() {   
             if(button.getCurrentLocation() != button.getNextLocation()){
                 try{  
-                repaint();
                 button.move();
+                repaint();
                 }catch (NullPointerException e){
                     System.out.println("Null ptr exception");
                 }
