@@ -1,6 +1,0 @@
-baza danych derby
-
-Baza danych[tabele...] -Connection/SQL> Model -Binding/Java> GUI[GUI, Jtable, sterowanie]
-                                        |
-                                    Serwer WWW
-                                        V
