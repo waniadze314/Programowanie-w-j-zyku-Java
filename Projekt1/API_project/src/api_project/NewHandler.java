@@ -9,7 +9,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-class NewHandler extends DefaultHandler{
+class NewHandler extends DefaultHandler{ 
+    private boolean bCurrency = false;
     private boolean bCode = false;
     private boolean bMid = false;
 
@@ -19,8 +20,10 @@ public void startElement(String uri, String localName, String qName, Attributes 
     //super.startElement(uri, localName, qName, attributes);
     //
     //ustawienie zmiennych na true powoduje wywołanie odpowiedniego ciągu instrukcji w metodzie characters
-    
-    if(qName.equalsIgnoreCase("Code")){
+     if(qName.equals("Currency")){
+        bCurrency = true;
+    }
+     else if(qName.equalsIgnoreCase("Code")){
         bCode = true;
     }
     else if(qName.equalsIgnoreCase("Mid")){
@@ -38,8 +41,12 @@ public void endElement(String uri, String localName, String qName) throws SAXExc
 @Override
 public void characters(char[] ch, int start, int length) throws SAXException {
     //super.characters(ch, start, length);
-    if(bCode){
+    if(bCurrency){
         System.out.print("Waluta: " + new String(ch, start, length) + ", ");
+        bCurrency = false;
+    }
+    else if(bCode){
+        System.out.print("KOD: " + new String(ch, start, length) + ", ");
         bCode = false;
     }
     else if(bMid){

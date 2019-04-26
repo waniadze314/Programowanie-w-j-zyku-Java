@@ -5,6 +5,22 @@
  */
 package api_project;
 
+import java.sql.*;
+
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.SAXParser;
+
+
+import java.awt.Dimension;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
 /**
  *
  * @author terg
@@ -26,22 +42,129 @@ public class API_project_UI extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+
+        jPanel1 = new javax.swing.JPanel();
+        refresh_button = new javax.swing.JButton();
+        clear_button = new javax.swing.JButton();
+        currency_input = new javax.swing.JTextField();
+        find_button = new javax.swing.JButton();
+        exit_button = new javax.swing.JButton();
+        status_field = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        refresh_button.setText("Zaktualizuj");
+        refresh_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refresh_buttonActionPerformed(evt);
+            }
+        });
+
+        clear_button.setText("Wyczyść");
+        clear_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clear_buttonActionPerformed(evt);
+            }
+        });
+
+        currency_input.setText("Wprowadź kod waluty");
+
+        find_button.setText("Znajdź walutę");
+
+        exit_button.setText("Wyjście");
+        exit_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exit_buttonActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, currency_input, org.jdesktop.beansbinding.ELProperty.create("${text}"), status_field, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(currency_input, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(find_button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                        .addComponent(refresh_button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clear_button)
+                        .addGap(18, 18, 18))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(status_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(exit_button)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(exit_button)
+                    .addComponent(status_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 208, Short.MAX_VALUE)
+                .addComponent(currency_input, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(refresh_button)
+                    .addComponent(clear_button)
+                    .addComponent(find_button))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void exit_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exit_buttonActionPerformed
+        System.exit(0);        // TODO add your handling code here:
+    }//GEN-LAST:event_exit_buttonActionPerformed
+
+    private void clear_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clear_buttonActionPerformed
+        currency_input.setText("");        // TODO add your handling code here:
+    }//GEN-LAST:event_clear_buttonActionPerformed
+
+    private void refresh_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refresh_buttonActionPerformed
+        try{
+            String nbpAdress = "https://api.nbp.pl/api/exchangerates/tables/a/last/5/?format=xml";
+            URL url = new URL(nbpAdress);
+            URLConnection connection = url.openConnection();
+            InputStream dataStream=connection.getInputStream();
+            //status = "Połączono z serwerem";
+            SAXParserFactory factory = SAXParserFactory.newInstance(); //fabryka obiektow
+            SAXParser saxParser = factory.newSAXParser(); //obiekt parser
+            NewHandler handler = new NewHandler(); //obiekt handlera
+            saxParser.parse(dataStream, handler);
+
+        }catch(Exception e){
+            System.out.println("Błąd połączenia z serwerem");
+            //status = "Błąd połączenia z serwerem";
+            e.printStackTrace();
+        }               // TODO add your handling code here:
+    }//GEN-LAST:event_refresh_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -76,8 +199,34 @@ public class API_project_UI extends javax.swing.JFrame {
                 new API_project_UI().setVisible(true);
             }
         });
+     
+     
+      String status = new String("");
+     //nawiazanie polaczenia z baza danych
+     try{
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kursy_walut?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","12345");
+        Statement stat = conn.createStatement();
+         System.out.println("Nawiązano połączenie z bazą danych");
+        // status = "Nawiązano połączenie z bazą danych";
+     }catch(Exception e){
+         System.out.println("Błąd połączenia z bazą danych");
+         //status = "Błąd połączenia z bazą danych";
+         System.out.println(e.getMessage());
+     }
+     
+      
+     
+    
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton clear_button;
+    private javax.swing.JTextField currency_input;
+    private javax.swing.JButton exit_button;
+    private javax.swing.JButton find_button;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton refresh_button;
+    private javax.swing.JTextField status_field;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
