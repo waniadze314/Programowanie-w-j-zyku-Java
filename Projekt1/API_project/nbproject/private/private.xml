@@ -4,7 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Programowanie/Programowanie-w-j-zyku-Java/Projekt1/API_project/src/api_project/NewHandler.java</file>
+            <file>file:/D:/Programowanie/Programowanie-w-j-zyku-Java/Projekt1/API_project/src/api_project/dataBaseConnection.java</file>
             <file>file:/D:/Programowanie/Programowanie-w-j-zyku-Java/Projekt1/API_project/src/api_project/API_project_UI.java</file>
+            <file>file:/D:/Programowanie/Programowanie-w-j-zyku-Java/Projekt1/API_project/src/api_project/status.java</file>
+            <file>file:/D:/Programowanie/Programowanie-w-j-zyku-Java/Projekt1/API_project/src/api_project/bindingConverter.java</file>
         </group>
     </open-files>
 </project-private>

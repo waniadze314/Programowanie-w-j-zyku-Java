@@ -1,3 +1,0 @@
-create database Kursy_walut;
-use Kursy_walut;
-create table Kursy_walut(kod_waluty char(3) not null, kurs float not null);
