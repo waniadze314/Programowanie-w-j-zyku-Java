@@ -32,7 +32,7 @@ public class bindingConverter extends Converter<String, String> {
         waluta = r.getString("nazwa");
         kurs = r.getString("kurs");
         data = r.getString("data");        
-        result = "Kurs " + waluta +" wynosi w dniu " + data + " : " + kurs;
+        result = "Kurs waluty " + waluta +" wynosi w dniu " + data + " : " + kurs;
         }
 
         }catch(SQLException se){
