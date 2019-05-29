@@ -10,6 +10,10 @@ package snakeapp;
  * @author terg
  */
 public class SnakeApp implements Runnable{
+    Snake snake1;
+    GameFrame frame1;
+    FoodGenerator generator1;
+    int gameSpeed;
 
     /**
      * @param args the command line arguments
@@ -18,6 +22,14 @@ public class SnakeApp implements Runnable{
         // TODO code application logic here
     }
 
+    void start(){
+        
+    }
+    
+    void stop(){
+        
+    }
+    
     @Override
     public void run() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
