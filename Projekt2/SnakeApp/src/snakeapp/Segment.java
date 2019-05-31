@@ -5,45 +5,62 @@
  */
 package snakeapp;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JComponent;
 
 /**
  *
  * @author terg
  */
-public class Segment extends JComponent{
-    Dimension size;
+public class Segment{
+    final Dimension size = new Dimension(20,20);
     Point position;
     Rectangle2D body;
     
     public Segment(){
-        size = new Dimension(20, 20);
-        position = new Point(320, 240); 
-        setLocation(position.x, position.y);
+        position = new Point(0, 0); 
         body = new Rectangle2D.Float(position.x,position.y,size.width,size.height); 
     }
+    
     public Segment(Point newPosition){
-        size = new Dimension(20, 20);
-        position = new Point(newPosition.x, newPosition.y);  
-        setLocation(position.x, position.y);
-        setFocusable(false);
+        position = new Point(newPosition.x, newPosition.y);          
+        body = new Rectangle2D.Float(newPosition.x,newPosition.y,size.width,size.height);
+    }   
+    
+    public void move(char direction){
+        int tmp_x=0, tmp_y=0;
+        switch(direction){
+            case 'U':
+                tmp_y=20;
+                break;
+            case 'D':
+                tmp_y=-20;
+                break;
+            case 'L':
+                tmp_x=-20;
+                break;
+            case 'R':
+                tmp_x=20;
+                break;
+        }
+        
+        Point tmp = position;
+        position = new Point(tmp.x+tmp_x, tmp.y-tmp_y);
+        body.setRect(position.x,position.y, size.height, size.width);
     }
-
-    @Override
-    public void paint(Graphics g) {
-        Graphics2D segmentGraphics = (Graphics2D)g;
-        segmentGraphics.setColor(new Color(255,0,0));
-        segmentGraphics.fill(body);
-        segmentGraphics.setColor(new Color(0,0,0));
-        segmentGraphics.draw(body);
-        System.out.println("...");  
-    }  
+    
+    public void moveToPosition(Point newPosition)  {   
+        position = newPosition;
+        body.setRect(position.x,position.y, size.height, size.width); 
+    }
+    
+    
+    
+    public Point getPosition(){
+        return position;
+    }
+    
 }
 
 

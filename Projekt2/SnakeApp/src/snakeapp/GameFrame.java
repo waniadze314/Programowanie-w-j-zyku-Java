@@ -7,11 +7,11 @@ package snakeapp;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Rectangle2D;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,33 +27,31 @@ import javax.swing.border.Border;
  */
 public class GameFrame extends JFrame implements KeyListener{
     
-    Dimension size;
+    final Point frameLimit[]={new Point(20, 80), new Point(620, 420)};
+    final Dimension size = new Dimension(680, 520);
     GamePanel panel;
     JPanel menuPanel;
     JButton start, pause, exit;
     JLabel score;
-    private final Timer tim1;    
-    Rectangle2D scene;
-    Border border = BorderFactory.createLineBorder(Color.black,2);
+    private final Timer tim1; 
     int speed;
+    boolean gameOn;
     
     Snake snake1;
+    FoodGenerator f1;
     
     
     public GameFrame(){ 
-        speed=250;
+        speed=100;
         addKeyListener(this);        
         tim1 = new  Timer();
         menuPanel = new JPanel(); 
         panel = new GamePanel();
-        panel.setLocation(0, 10);
+        panel.setLocation(0, 20);
         panel.setSize(640,445);
         panel.setLayout(null);
         menuPanel.setLayout(null);
-        menuPanel.setPreferredSize(new Dimension(640, 30));
-        menuPanel.setBorder(border);
-        
-        size = new Dimension(640, 480);    
+        menuPanel.setPreferredSize(new Dimension(640, 30)); 
         start = new JButton("Start");
         start.setFocusable(false);
         pause = new JButton("Pause");
@@ -69,37 +67,12 @@ public class GameFrame extends JFrame implements KeyListener{
         menuPanel.add(pause);
         menuPanel.add(exit);
         menuPanel.add(score);
-        
-        
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        
-        start.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            if(snake1==null){
-                snake1 = new Snake();               
-                getContentPane().add(snake1);
-                System.out.println("Start");
-            }
-            }
-        });
-        
-        pause.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Pause");
-            }
-        });
-        
+        menuPanel.setOpaque(false);       
+        setTitle("Snake");
+        snake1 = new Snake(); 
+        f1 = new FoodGenerator();    
         getContentPane().add(panel);
         getContentPane().add(menuPanel);
-        setTitle("Snake");
-        panel.setBackground(Color.gray);
         setSize(size);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -108,16 +81,53 @@ public class GameFrame extends JFrame implements KeyListener{
         
         tim1.scheduleAtFixedRate(new TimerTask(){
         @Override
-        public void run() {              
-                try{  
-                    repaint();
-                }catch (NullPointerException e){
-                    System.out.println("Null ptr exception");
-                }                      
+        public void run() {   
+            if(gameOn){
+                snake1.move();
+                checkBorderCollision(snake1);
+//                checkFoodCollision(snake1, f1);
+                repaint();                
+            }
+                
         }
-    }, speed, speed);   
+    }, 0, speed);   
         
-    }
+        start.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    
+            getContentPane().add(f1);
+            getContentPane().add(snake1);
+            
+                score.setText("Score: "+ String.valueOf(snake1.length));
+                gameOn=true;
+                start.setVisible(false);                
+                gameOn = true;
+           
+            }
+        });
+        
+         exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        
+        pause.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(gameOn){
+                    gameOn = false;
+                    pause.setText("Resume");
+                }else{
+                    gameOn = true;
+                    pause.setText("Pause");
+                }
+            }
+        });
+        
+}
     
     @Override
     public void keyTyped(KeyEvent e) {}
@@ -125,31 +135,59 @@ public class GameFrame extends JFrame implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {    
         int symbol = e.getKeyCode();
-        switch(symbol){
-            case KeyEvent.VK_LEFT:
-                score.setText("Left");
-                break;
-            case KeyEvent.VK_RIGHT:
-                score.setText("Right");
-                break;
-            case KeyEvent.VK_UP:
-                score.setText("Up");
-                break;
-            case KeyEvent.VK_DOWN:
-                score.setText("Down");
-                break;
-        }        
+            if(snake1!=null){
+                switch(symbol){
+                    case KeyEvent.VK_LEFT:
+                        if(snake1.getDirection()!='R'){
+                            setSnakeDirection('L');
+                        }
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        if(snake1.getDirection()!='L'){
+                            setSnakeDirection('R');
+                        }
+                        break;
+                    case KeyEvent.VK_UP:
+                        if(snake1.getDirection()!='D'){
+                            setSnakeDirection('U');
+                        }
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        if(snake1.getDirection()!='U'){
+                            setSnakeDirection('D');
+                        } 
+                        break;                
+                }
+            }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {}
     
-    void setSnakeDirection(){
-        
+    void setSnakeDirection(char dir){        
+        snake1.setDirection(dir);
     }
     
     void setSpeed(int newSpeed){
         speed = newSpeed;
     }
     
+    void checkFoodCollision(Snake s, FoodGenerator f ){
+        Point snakeHead = s.getHeadPosition();
+        if(snakeHead==f.getFoodPosition()){
+            s.grow();
+            f1.generateFood();
+        }       
+    }
+    
+    void checkBorderCollision(Snake s){
+        Point snakeHead = s.getHeadPosition();
+        if(snakeHead.x<frameLimit[0].x || snakeHead.x>frameLimit[1].x 
+        || snakeHead.y<frameLimit[0].y || snakeHead.y>frameLimit[1].y){
+            gameOn=false;
+        }
+
+
+        
+    }
 }

@@ -21,7 +21,7 @@ public class GamePanel extends JPanel{
     public void paint(Graphics g) {
         Graphics2D g2D = (Graphics2D)g;
         g2D.setColor(new Color(0,0,0));
-        Rectangle2D scene = new Rectangle2D.Float(10, 60, 600, 350);
+        Rectangle2D scene = new Rectangle2D.Float(20, 60, 640, 360);
         g2D.draw(scene);
         g2D.setColor(new Color(0,255,0,50));
         g2D.fill(scene);

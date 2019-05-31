@@ -14,16 +14,8 @@ import java.awt.Point;
 public class Food extends Segment{
     boolean exists;
     
-    public Food(){
-        
-    }
-    
-    public Point getPosition(){
-        return position;
-    }
-    
-    void generatePosition(){
-        
+    public Food(Point position){
+        super(position);
     }
     
    void  getExistsInfo(){
