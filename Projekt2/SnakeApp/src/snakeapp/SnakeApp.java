@@ -5,29 +5,20 @@
  */
 package snakeapp;
 
+
 /**
  *
  * @author terg
  */
 public class SnakeApp implements Runnable{
-    Snake snake1;
-    GameFrame frame1;
-    FoodGenerator generator1;
-    int gameSpeed;
+    static GameFrame frame1;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-    }
-
-    void start(){
-        
-    }
-    
-    void stop(){
-        
+        frame1 = new GameFrame();        
     }
     
     @Override

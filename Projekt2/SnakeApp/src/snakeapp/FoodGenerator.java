@@ -5,11 +5,13 @@
  */
 package snakeapp;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author terg
  */
-public class FoodGenerator {
+public class FoodGenerator extends JPanel{
     
     public FoodGenerator(){
         
