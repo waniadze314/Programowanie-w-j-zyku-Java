@@ -5,17 +5,9 @@
  */
 package snakeapp;
 
-
-/**
- *
- * @author terg
- */
 public class SnakeApp implements Runnable{
     static GameFrame frame1;
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         // TODO code application logic here
         frame1 = new GameFrame();        

@@ -54,8 +54,7 @@ public class Segment{
         position = newPosition;
         body.setRect(position.x,position.y, size.height, size.width); 
     }
-    
-    
+     
     
     public Point getPosition(){
         return position;

@@ -16,11 +16,6 @@ public class Food extends Segment{
     
     public Food(Point position){
         super(position);
+        System.out.println(position);
     }
-    
-   void  getExistsInfo(){
-        
-    }
-    
-    
 }

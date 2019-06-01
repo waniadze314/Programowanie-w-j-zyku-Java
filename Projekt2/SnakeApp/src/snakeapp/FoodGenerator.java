@@ -16,7 +16,7 @@ import java.util.Random;
  *
  * @author terg
  */
-public class FoodGenerator extends JPanel{
+public class FoodGenerator{
     Random positionGenerator;
     Food food1;
     
@@ -34,16 +34,8 @@ public class FoodGenerator extends JPanel{
     }
     
     public void generateFood(){
-        int tmp_x = 20+Math.abs(20*(positionGenerator.nextInt()%30));
-        int tmp_y = 80+Math.abs(20*(positionGenerator.nextInt()%20));
+        int tmp_x = 20+Math.abs(20*(positionGenerator.nextInt()%24));
+        int tmp_y = 60+Math.abs(20*(positionGenerator.nextInt()%17));
         food1 = new Food(new Point(tmp_x, tmp_y));
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        Graphics2D g2D = (Graphics2D)g;
-        g2D.setColor(Color.black);
-        g2D.fill(food1.body);
-        System.out.println("FG repaint");
     }
 }
