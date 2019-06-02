@@ -34,8 +34,8 @@ public class FoodGenerator{
     }
     
     public void generateFood(){
-        int tmp_x = 20+Math.abs(20*(positionGenerator.nextInt()%24));
-        int tmp_y = 60+Math.abs(20*(positionGenerator.nextInt()%17));
+        int tmp_x = 20+Math.abs(20*(positionGenerator.nextInt()%21));
+        int tmp_y = 60+Math.abs(20*(positionGenerator.nextInt()%14));
         food1 = new Food(new Point(tmp_x, tmp_y));
     }
 }

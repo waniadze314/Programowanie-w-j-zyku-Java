@@ -8,7 +8,6 @@ package snakeapp;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +16,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -30,7 +30,7 @@ import javax.swing.border.Border;
  */
 public class GameFrame extends JFrame implements KeyListener{
     
-    final Point frameLimit[]={new Point(20, 60), new Point(500, 380)};
+    final Point frameLimit[]={new Point(20, 60), new Point(480, 360)};
     final Dimension size = new Dimension(700, 520);  
     private final Timer tim1; 
     final int initialSpeed = 100;
@@ -38,8 +38,8 @@ public class GameFrame extends JFrame implements KeyListener{
     JPanel panel;
     GamePanel gamePanel;
     boolean gameOn;
-    JButton start, pause, exit;
-    JLabel score;
+    JButton start, exit;
+    JLabel score, pause;
 
     
     public GameFrame(){         
@@ -51,31 +51,31 @@ public class GameFrame extends JFrame implements KeyListener{
         panel = new JPanel();
         panel.setOpaque(true);
             
-            panel.setPreferredSize(new Dimension(640,40));
-            panel.setBorder(BorderFactory.createLineBorder(Color.black, 3));
-            panel.setLayout(null);
-            start = new JButton("Start");
-            start.setBounds(50, 5, 80, 30);
-            pause = new JButton("Pause");
-            pause.setBounds(130, 5, 90, 30);
-            exit = new JButton("Exit");
-            exit.setBounds(500, 5, 80, 30);
-            exit.setBackground(Color.red);
-            score = new JLabel("Press Start");
-            score.setBounds(320, 5, 100, 30);
+        panel.setPreferredSize(new Dimension(640,40));
+        panel.setBorder(BorderFactory.createLineBorder(Color.black, 3));
+        panel.setLayout(null);
+        
+        start = new JButton("Start");
+        start.setBounds(50, 5, 80, 30);
+        exit = new JButton("Exit");
+        exit.setBounds(500, 5, 80, 30);
+        exit.setBackground(Color.red);
+        score = new JLabel("Press Start");
+        score.setBounds(320, 5, 100, 30);
+        pause = new JLabel("Press 'P' to pause");
+        pause.setBounds(150,5,150,30);
             
-            gameOn=false;
-            panel.add(start);
-            panel.add(pause);
-            panel.add(exit);
-            panel.add(score);      
-            panel.setVisible(true);     
-                        
-            start.addActionListener(new ActionListener() {
+        gameOn=false;
+        panel.add(start);
+        panel.add(exit);
+        panel.add(score);      
+        panel.add(pause);
+        panel.setVisible(true);     
+                     
+        start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { 
                 start();
-                getContentPane().add(gamePanel);
                 start.setVisible(false);
            
             }
@@ -88,44 +88,28 @@ public class GameFrame extends JFrame implements KeyListener{
             }
         });
         
-        pause.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(gameOn){
-                    gameOn = false;
-                    pause.setText("Resume");
-                }else{
-                    gameOn = true;
-                    pause.setText("Pause");
-                }
-            }
-        });
+       
         
        
-        getContentPane().add(panel);
-        
-        setLayout(new FlowLayout());
-        
+        getContentPane().add(panel);       
+        setLayout(new FlowLayout());        
+        setUndecorated(true);
         setSize(size);
         setVisible(true);
         setFocusable(true);
-        setFocusTraversalKeysEnabled(false);
+        setFocusTraversalKeysEnabled(true);
         
         tim1.scheduleAtFixedRate(new TimerTask(){
         @Override
         public void run() {   
-            if(gameOn){
+            if(gameOn && gamePanel!=null){
                 gamePanel.snake1.move();
                 checkBorderCollision(gamePanel);
                 checkSnakeCollision(gamePanel);
                 checkFoodCollision(gamePanel);
-                score.setText("Score: " + String.valueOf(actualScore));
-                if(actualScore%3==0){
-                    increaseSpeed();
-                }
-                repaint();                
-            }
-                
+                score.setText("Score: " + String.valueOf(actualScore));                
+                repaint();     
+            }                
             }
         }, 0, speed);        
     }
@@ -138,6 +122,9 @@ public class GameFrame extends JFrame implements KeyListener{
         int symbol = e.getKeyCode();
             if(gamePanel!=null){
                 switch(symbol){
+                    case KeyEvent.VK_P:
+                        pause();
+                        break;
                     case KeyEvent.VK_LEFT:
                         if(gamePanel.snake1.getDirection()!='R'){
                             gamePanel.setSnakeDirection('L');
@@ -158,6 +145,10 @@ public class GameFrame extends JFrame implements KeyListener{
                             gamePanel.setSnakeDirection('D');
                         } 
                         break;                
+                }try{
+                TimeUnit.MILLISECONDS.sleep(initialSpeed);
+                }catch(Exception ex){
+                    System.err.println("Cannot wait");
                 }
             }
     }
@@ -171,9 +162,7 @@ public class GameFrame extends JFrame implements KeyListener{
         speed = newSpeed;
     }
     
-    void increaseSpeed(){
-        speed-=50;
-    }
+  
     
     void checkFoodCollision(GamePanel gp){
         Point snakeHead = gp.snake1.getHeadPosition();
@@ -198,7 +187,6 @@ public class GameFrame extends JFrame implements KeyListener{
         Point snakeHead = gp.snake1.getHeadPosition();
         if(snakeHead.x<frameLimit[0].x || snakeHead.x>frameLimit[1].x 
         || snakeHead.y<frameLimit[0].y || snakeHead.y>frameLimit[1].y){
-            gameOn = false;
             stop();
         }     
     }
@@ -208,31 +196,42 @@ public class GameFrame extends JFrame implements KeyListener{
         for(int i=1;i<gp.snake1.body.size();i++){
             Point segmentPosition = gp.snake1.body.get(i).getPosition();
             if((snakeHead.x == segmentPosition.x) && (snakeHead.y == segmentPosition.y)){
-                gameOn = false;
                 stop();
             }
         }       
     }   
     
     void start(){
-        actualScore = 0;
         gameOn = true;
+        actualScore = 0;
         gamePanel = new GamePanel();  
-        gamePanel.setPreferredSize(new Dimension(520, 400));
-        gamePanel.setLocation(0, 30);        
-        gamePanel.setBorder(BorderFactory.createLineBorder(Color.black, 3));
-        gamePanel.setLayout(null);        
-        super.add(gamePanel);
+        gamePanel.setPreferredSize(new Dimension(520, 400));       
+        gamePanel.setBorder(BorderFactory.createLineBorder(Color.black, 3)); 
+        super.getContentPane().add(gamePanel);
+    }
+    void pause(){
+        if(gameOn){
+            gameOn = false;
+            pause.setText("Press 'P' to resume");
+        }else{
+               gameOn = true;
+               pause.setText("Press 'P' to pause");
+        }
     }
     
-    void restart(){
-        
+    void restart(){     
+        gamePanel.snake1.destroySnake();
+        gamePanel.snake1 = new Snake();
+        gamePanel.f1.generateFood();
+        actualScore = 0;      
+        gameOn = true;        
     }
     
     void stop(){
-        int decision = JOptionPane.showConfirmDialog(null, "GAME OVER", "Do You want to play again?", JOptionPane.YES_NO_OPTION);
+        gameOn = false;
+        int decision = JOptionPane.showConfirmDialog(null, "Do You want to play again?", "GAME OVER", JOptionPane.YES_NO_OPTION);
         if(decision == 0){
-//            start();       
+            restart();       
         }
         else if(decision == 1){
             System.exit(0);

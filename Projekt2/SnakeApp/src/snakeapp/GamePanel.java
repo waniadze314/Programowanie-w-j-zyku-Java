@@ -6,9 +6,11 @@
 package snakeapp;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /**
@@ -33,12 +35,15 @@ public class GamePanel extends JPanel{
     @Override
     public void paint(Graphics g) {
         Graphics2D g2D = (Graphics2D)g;
-        Rectangle2D scene = new Rectangle2D.Float(20, 60, 640, 360);
-        g2D.setColor(new Color(0,255,0,100));
+        Rectangle2D scene = new Rectangle2D.Float(20, 60, 480, 320);
+        Rectangle2D sceneBorder = new Rectangle2D.Float(0,40,680,400);
+        g2D.setColor(Color.red);
+        g2D.fill(sceneBorder);
+        g2D.setColor(new Color(0,255,0));
         g2D.fill(scene);
         
         for (int i=0;i<snake1.body.size();i++){
-            g2D.setColor(Color.green);
+            g2D.setColor(new Color(0,150,150));
             g2D.fill(snake1.body.get(i).body);
             g2D.setColor(Color.red);
             g2D.draw(snake1.body.get(i).body);  

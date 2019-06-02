@@ -5,39 +5,36 @@
  */
 package snakeapp;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+
 import java.awt.Point;
 import java.util.ArrayList;
-import javax.swing.JPanel;
 
 /**
  *
  * @author terg
  */
 public class Snake{
+    final Point defaultSegments[]={new Point(260, 240), new Point(240, 240), new Point(220, 240),
+    new Point(200, 240), new Point(180, 240), new Point(160, 240)};
     ArrayList<Segment> body;
-    Point initialPosition;
     char direction;
-    boolean grow;
     
     public Snake(){
-        System.out.println("Snake born");
+        body = new ArrayList<>();
+        initSnake();
+    }
+    
+    void initSnake(){        
         direction = 'R';
-        body = new ArrayList<>();        
-            Segment tmp_seg1 = new Segment(new Point(360, 240));            
-            Segment tmp_seg2 = new Segment(new Point(340, 240));                        
-            Segment tmp_seg3 = new Segment(new Point(320, 240));                                   
-            Segment tmp_seg4 = new Segment(new Point(300, 240));                                   
-            Segment tmp_seg5 = new Segment(new Point(280, 240));                                  
-            Segment tmp_seg6 = new Segment(new Point(260, 240));
-            body.add(tmp_seg1);
-            body.add(tmp_seg2);
-            body.add(tmp_seg3);
-            body.add(tmp_seg4);            
-            body.add(tmp_seg5);            
-            body.add(tmp_seg6);
+        if(body!=null){
+            for (int i=0;i<=2;i++){
+                body.add(new Segment(defaultSegments[i]));
+            }
+        }
+    }
+    
+    public void destroySnake(){
+        body.clear();
     }
     
     public void grow(){
