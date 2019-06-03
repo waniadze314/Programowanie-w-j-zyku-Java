@@ -202,12 +202,12 @@ public class GameFrame extends JFrame implements KeyListener{
     }   
     
     void start(){
-        gameOn = true;
         actualScore = 0;
         gamePanel = new GamePanel();  
         gamePanel.setPreferredSize(new Dimension(520, 400));       
         gamePanel.setBorder(BorderFactory.createLineBorder(Color.black, 3)); 
         super.getContentPane().add(gamePanel);
+        gameOn = true;
     }
     void pause(){
         if(gameOn){
@@ -231,7 +231,8 @@ public class GameFrame extends JFrame implements KeyListener{
         gameOn = false;
         int decision = JOptionPane.showConfirmDialog(null, "Do You want to play again?", "GAME OVER", JOptionPane.YES_NO_OPTION);
         if(decision == 0){
-            restart();       
+            restart();    
+            restart();
         }
         else if(decision == 1){
             System.exit(0);
